@@ -132,6 +132,8 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',
     'https://tenfortow.vercel.app',
     'https://www.tenfortow.com',
+    'https://127.0.0.1:8000',
+    'http://localhost:8158'
     # 'https://www.tenfortow.com'
 ]
 
@@ -141,5 +143,5 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'tenfortow@gmail.com'
-EMAIL_HOST_PASSWORD = 'fbktaseuzkezezpq'
+EMAIL_HOST_USER = 'jvictory225@gmail.com'
+EMAIL_HOST_PASSWORD = 'vumftzkqifyhilzz'

